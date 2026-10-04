@@ -627,8 +627,7 @@ section::before {
 }
 
 .count {
-  font-size: 0.9rem;
-  color: var(--text-muted);
+  font-size: 1.2rem;
 }
 
 .write-review-button {
