@@ -267,7 +267,7 @@ section::before {
   border-radius: 999px;
   background: rgb(var(--red));
   color: #fff;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
