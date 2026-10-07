@@ -42,6 +42,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -129,7 +131,12 @@ header {
   margin: 3px 0;
   border-radius: 2px;
   background-color: white;
+  transition: transform 0.3s ease, opacity 0.2s ease;
 }
+
+.burger[aria-expanded="true"] div:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.burger[aria-expanded="true"] div:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] div:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
 .mobile-menu {
   display: flex;
@@ -192,6 +199,7 @@ section::before {
   font-weight: 700;
   letter-spacing: -0.01em;
   text-align: center;
+  text-wrap: balance;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
@@ -251,6 +259,7 @@ section::before {
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
+  text-wrap: balance;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
@@ -283,17 +292,20 @@ section::before {
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.about-glass .new-badge:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+@media (hover: hover) {
+  .about-glass .new-badge:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
 }
 
 /* =========================
    Services / Pricing
 ========================= */
 .tier-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* a leftover card on the last row sits in the middle */
   gap: 1.5rem;
   width: 100%;
   max-width: 1240px;
@@ -301,6 +313,7 @@ section::before {
 
 .tier {
   position: relative;
+  flex: 0 1 280px; /* same width for every card, even one alone on a row */
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem 1.5rem;
@@ -308,9 +321,11 @@ section::before {
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
-.tier:hover {
-  transform: translateY(-6px);
-  border-color: rgba(255, 255, 255, 0.35);
+@media (hover: hover) {
+  .tier:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
 }
 
 .tier h3 {
@@ -471,11 +486,13 @@ section::before {
   border-color: transparent;
 }
 
-.signup-button:hover,
-.signup-button-blue:hover {
-  background-color: rgb(var(--accent));
-  filter: brightness(1.12);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .signup-button:hover,
+  .signup-button-blue:hover {
+    background-color: rgb(var(--accent));
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+  }
 }
 
 /* =========================
@@ -761,39 +778,145 @@ section::before {
 /* =========================
    Responsive
 ========================= */
+
+/* Tablets and phones */
 @media (max-width: 768px) {
-  .nav-container { padding: 0.75rem 1.25rem; }
-  .logo img      { height: 46px; }
+  /* Header */
+  .nav-container { padding: 0.65rem 1rem; }
+  .logo img      { height: 44px; }
   .nav-links     { display: none; }
-  .burger        { display: flex; }
 
-  section {
-    padding: 6rem 1rem 3rem;
+  .burger {
+    display: flex;
+    padding: 10px;   /* bigger tap target */
+    margin: -10px;   /* without shifting the layout */
   }
 
-  #subheading { font-size: 1.1rem; }
-
-  .tier-container {
-    max-width: 440px;
-  }
-
-  .contact-glass {
-    padding: 2rem 1.25rem;
-  }
-
-  .phone-numbers {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .phone-numbers a {
+  .mobile-menu a {
     width: 100%;
-    max-width: 300px;
+    padding: 0.85rem 0;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+
+  /* Sections size to their content instead of each filling the screen */
+  section {
+    min-height: auto;
+    gap: 1.5rem;
+    padding: 5.5rem 1rem 3.5rem;
+  }
+
+  /* A plain overlay scrolls more smoothly on phones than a blurred one */
+  section::before {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .section-title,
+  .tutorial-video h2 { font-size: 1.6rem; }
+
+  /* Hero */
+  .about-glass h1 { font-size: 2.1rem; }
+  #subheading     { font-size: 1.05rem; }
+
+  .about-glass .new-badge {
+    margin-top: 1.25rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  /* Google rating */
+  .google-logo { width: 84px; }
+
+  .review-summary {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
   }
 
   .rating { font-size: 1.6rem; }
   .stars  { font-size: 1.3rem; }
+  .count  { font-size: 0.95rem; }
 
-  .slide-content { margin: 0; }
-  .swiper-navBtn { display: none; }
+  /* Review cards */
+  .slide-content     { margin: 0; }
+  .swiper-navBtn     { display: none; }
+  .swiper-pagination { margin-top: 1rem; }
+
+  .card {
+    height: 250px;
+    padding: 1.1rem;
+  }
+
+  /* Panels */
+  .contact-glass { padding: 1.75rem 1.25rem; }
+
+  .contact-glass h2 { font-size: 1.5rem; }
+
+  .contact-glass p,
+  .contact-glass address {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .spacer { height: 1.25rem; }
+
+  /* Buttons: comfortable thumb size */
+  .contact-button { padding: 0.8rem 1rem; }
+
+  /* Services */
+  .tier-container {
+    max-width: 440px;
+    gap: 2rem; /* room for the "New/Fast!" badge between cards */
+  }
+
+  .tier       { flex-basis: 100%; padding: 1.75rem 1.25rem 1.25rem; }
+  .tier h3    { min-height: 0; font-size: 1.1rem; }
+  .tier h2    { margin: 0.25rem 0 1rem; font-size: 2.25rem; }
+
+  .tier .new-badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .tier .details         { padding-block: 0.5rem; font-size: 0.92rem; }
+  .tier .details::before { top: 0.5rem; }
+
+  .extra-details.open { max-height: 900px; } /* longer text wraps more on narrow screens */
+
+  /* Contact */
+  #map { height: 260px; }
+
+  .phone-numbers {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .phone-numbers a {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* Online course */
+  .registration-steps    { margin: 1.25rem 0; }
+  .registration-steps li { padding-left: 2.5rem; font-size: 0.95rem; }
+
+  .registration-steps li::before {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Small phones (iPhone SE, older Androids) */
+@media (max-width: 380px) {
+  .about-glass h1 { font-size: 1.85rem; }
+
+  .contact-glass { padding: 1.5rem 1rem; }
+  .tier          { padding-inline: 1rem; }
+  .tier h2       { font-size: 2rem; }
+
+  .rating { font-size: 1.4rem; }
+  .stars  { font-size: 1.15rem; }
 }
