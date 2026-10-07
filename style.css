@@ -806,6 +806,12 @@ section::before {
     padding: 5.5rem 1rem 3.5rem;
   }
 
+  /* FAQ is short and last on the page, so let it fill the screen */
+  #faq {
+    min-height: 100vh;  /* fallback for older browsers */
+    min-height: 100svh; /* screen height with the browser bars showing */
+  }
+
   /* A plain overlay scrolls more smoothly on phones than a blurred one */
   section::before {
     background-color: rgba(0, 0, 0, 0.5);
