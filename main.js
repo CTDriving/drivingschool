@@ -4,9 +4,7 @@
    ========================================================= */
 
 const SCHOOL = {
-  name: "C&T Driving School",
   address: "1265 W 500 North, Salt Lake City, UT 84116",
-  coords: [40.7799209, -111.9276365],
 };
 
 /* ---------- Mobile menu ---------- */
@@ -202,14 +200,3 @@ new Swiper(".slide-content", {
     1100: { slidesPerView: 4 },
   },
 });
-
-/* ---------- Map ---------- */
-
-const map = L.map("map").setView(SCHOOL.coords, 17);
-
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
-
-L.marker(SCHOOL.coords).addTo(map).bindPopup(SCHOOL.name).openPopup();
