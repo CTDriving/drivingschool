@@ -1,67 +1,62 @@
 /* =========================================================
    C&T Driving School — main.js
-   Loaded with `defer`, so the DOM is ready when this runs.
+   Loaded with `defer`, so the page is ready when this runs.
    ========================================================= */
-
-const SCHOOL = {
-  address: "1265 W 500 North, Salt Lake City, UT 84116",
-};
 
 /* ---------- Mobile menu ---------- */
 
-function toggleMenu() {
-  const menu = document.getElementById("mobileMenu");
-  const isOpen = menu.classList.toggle("active");
-  document.querySelector(".burger")?.setAttribute("aria-expanded", isOpen);
+const burger = document.querySelector(".burger");
+const nav = document.getElementById("site-nav");
+
+function setMenu(open) {
+  nav.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", open);
 }
+
+burger.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+nav.addEventListener("click", (e) => {
+  if (e.target.closest("a")) setMenu(false);
+});
+
+/* ---------- Expandable details (service cards + FAQ) ---------- */
+
+function toggle(button) {
+  const open = button.nextElementSibling.classList.toggle("open");
+  button.setAttribute("aria-expanded", open);
+  if (button.closest(".tier")) button.textContent = open ? "Hide Detail" : "More Detail";
+}
+
+document.addEventListener("click", (e) => {
+  const button = e.target.closest(".toggle");
+  if (button) return toggle(button);
+
+  // "Other Accepted Documents" opens its card's details too
+  const docs = e.target.closest(".details.clickable");
+  if (docs) toggle(docs.closest(".tier").querySelector(".toggle"));
+});
 
 /* ---------- Copy address ---------- */
 
-function copyAddress(event) {
-  event.preventDefault();
-  const link = event.currentTarget;
+const copyLink = document.getElementById("copy-address");
+const address = document.querySelector("#contact address").textContent.trim();
 
+copyLink.addEventListener("click", (e) => {
+  e.preventDefault();
   navigator.clipboard
-    .writeText(SCHOOL.address)
-    .then(() => flashText(link, "Copied!"))
-    .catch(() => flashText(link, "Copy failed"));
-}
-
-function flashText(el, text, ms = 2000) {
-  const original = el.dataset.label ?? el.textContent;
-  el.dataset.label = original;
-  el.textContent = text;
-  setTimeout(() => (el.textContent = original), ms);
-}
-
-/* ---------- Service tier details ---------- */
-
-function toggleDetails(el) {
-  const tier = el.closest(".tier");
-  const box = tier.querySelector(".extra-details");
-  const button = tier.querySelector("button.contact-button");
-  const isOpen = box.classList.toggle("open");
-
-  button.textContent = isOpen ? "Hide Detail" : "More Detail";
-  button.setAttribute("aria-expanded", isOpen);
-}
-
-// "Other Accepted Documents" rows open the tier's details too
-document.querySelectorAll(".details.clickable").forEach((li) => {
-  li.style.cursor = "pointer";
-  li.addEventListener("click", () => toggleDetails(li));
+    .writeText(address)
+    .then(() => flash("Copied!"), () => flash("Copy failed"));
 });
 
-/* ---------- FAQ ---------- */
-
-function toggleQuestions(button) {
-  const isOpen = button.nextElementSibling.classList.toggle("open");
-  button.setAttribute("aria-expanded", isOpen);
+function flash(text) {
+  copyLink.textContent = text;
+  setTimeout(() => (copyLink.textContent = "Copy Address"), 2000);
 }
 
 /* ---------- FAQ background slideshow ---------- */
+// Only runs while the FAQ is on screen, so phones don't download
+// every photo up front.
 
-const faqSection = document.getElementById("faq");
+const faq = document.getElementById("faq");
 const backgrounds = [
   "files/title.jpg",
   "files/deskone.jpg",
@@ -70,18 +65,22 @@ const backgrounds = [
   "files/awards.jpg",
   "files/signs.jpg",
 ];
-
-// Preload so each swap doesn't flash
-backgrounds.forEach((src) => (new Image().src = src));
-
 let bgIndex = 0;
+let bgTimer;
+
 function nextBackground() {
-  faqSection.style.backgroundImage = `url('${backgrounds[bgIndex]}')`;
+  faq.style.backgroundImage = `url("${backgrounds[bgIndex]}")`;
   bgIndex = (bgIndex + 1) % backgrounds.length;
+  new Image().src = backgrounds[bgIndex]; // preload the next one
 }
 
-nextBackground();
-setInterval(nextBackground, 5000);
+new IntersectionObserver(([entry]) => {
+  clearInterval(bgTimer);
+  if (entry.isIntersecting) {
+    if (!bgIndex) nextBackground();
+    bgTimer = setInterval(nextBackground, 5000);
+  }
+}, { rootMargin: "200px" }).observe(faq);
 
 /* ---------- Reviews ---------- */
 
@@ -161,36 +160,29 @@ const avatarColors = [
   "rgba(255, 105, 180, 0.5)", // bubblegum
 ];
 
-function createReviewCard({ name, text, link }, i) {
-  const card = document.createElement("div");
-  card.className = "card swiper-slide";
-  card.innerHTML = `
-    <div class="card-content">
-      <div class="review-header">
-        <div class="avatar" style="background-color:${avatarColors[i % avatarColors.length]}; color:white;">
-          ${name.charAt(0)}
+document.getElementById("reviews-wrapper").innerHTML = reviews
+  .map(
+    ({ name, text, link }, i) => `
+      <div class="card swiper-slide">
+        <div class="review-header">
+          <div class="avatar" style="background-color: ${avatarColors[i % avatarColors.length]}">${name[0]}</div>
+          <div>
+            <h3 class="name">${name}</h3>
+            <div class="stars" aria-label="5 stars">★★★★★</div>
+          </div>
         </div>
-        <div class="reviewer-info">
-          <h3 class="name">${name}</h3>
-          <div class="stars" aria-label="5 stars">★★★★★</div>
-        </div>
-      </div>
-      <p class="description">${text}</p>
-      <a class="button" href="${link}" target="_blank" rel="noopener noreferrer">Read More</a>
-    </div>
-  `;
-  return card;
-}
-
-document
-  .getElementById("reviews-wrapper")
-  .append(...reviews.map(createReviewCard));
+        <p class="description">${text}</p>
+        <a class="button" href="${link}" target="_blank" rel="noopener noreferrer"
+           aria-label="Read ${name}'s full review on Google">Read More</a>
+      </div>`
+  )
+  .join("");
 
 new Swiper(".slide-content", {
   spaceBetween: 25,
   loop: true,
   grabCursor: true,
-  autoplay: { delay: 5000, disableOnInteraction: false },
+  autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
   pagination: { el: ".swiper-pagination", clickable: true },
   navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
   breakpoints: {

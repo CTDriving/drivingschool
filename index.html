@@ -9,6 +9,48 @@
     />
     <title>C&amp;T Driving School</title>
 
+    <!-- Link previews (texts, Facebook, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="C&amp;T Driving School" />
+    <meta property="og:title" content="C&amp;T Driving School | Salt Lake City" />
+    <meta
+      property="og:description"
+      content="Utah-approved driver education (online or home study), behind-the-wheel lessons, and state road tests. Serving Salt Lake City for over 20 years."
+    />
+    <meta property="og:url" content="https://candtdriving.com/" />
+    <meta property="og:image" content="https://candtdriving.com/files/outside.jpg" />
+    <meta property="og:image:alt" content="C&amp;T Driving School in Salt Lake City" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Business info for Google -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "DrivingSchool",
+        "name": "C&T Driving School",
+        "url": "https://candtdriving.com/",
+        "logo": "https://candtdriving.com/files/logo.png",
+        "image": "https://candtdriving.com/files/outside.jpg",
+        "description": "Utah-approved driver education (online or home study), behind-the-wheel lessons, and state road tests in Salt Lake City.",
+        "telephone": "+1-801-652-1893",
+        "priceRange": "$50 - $390",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "1265 W 500 N",
+          "addressLocality": "Salt Lake City",
+          "addressRegion": "UT",
+          "postalCode": "84116",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 40.7799209,
+          "longitude": -111.9276365
+        },
+        "hasMap": "https://www.google.com/maps/place/?q=place_id:0x8752f441f01d54ad:0xe4ad94c0ea60761e"
+      }
+    </script>
+
     <link rel="icon" href="files/ctlogo.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,43 +70,33 @@
           <img src="files/logo.png" alt="C&amp;T Driving School" />
         </a>
 
-        <nav class="nav-links" aria-label="Main">
+        <button
+          type="button"
+          class="burger"
+          aria-label="Menu"
+          aria-controls="site-nav"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav id="site-nav" class="nav-links" aria-label="Main">
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#contact">Contact Us</a>
           <a href="#online-course">Online Course</a>
           <a href="#faq">FAQ</a>
         </nav>
-
-        <div
-          class="burger"
-          role="button"
-          tabindex="0"
-          aria-label="Open menu"
-          aria-controls="mobileMenu"
-          onclick="toggleMenu()"
-          onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleMenu(); }"
-        >
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
       </div>
-
-      <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-        <a href="#about" onclick="toggleMenu()">About</a>
-        <a href="#services" onclick="toggleMenu()">Services</a>
-        <a href="#contact" onclick="toggleMenu()">Contact Us</a>
-        <a href="#online-course" onclick="toggleMenu()">Online Course</a>
-        <a href="#faq" onclick="toggleMenu()">Frequently Asked Questions</a>
-      </nav>
     </header>
 
     <main>
       <!-- ======= ABOUT ======= -->
       <section id="about">
         <div class="about-glass">
-          <h1 id="welcome">Welcome to C&amp;T Driving School</h1>
+          <h1>Welcome to C&amp;T Driving School</h1>
           <p id="subheading">Proudly Serving Our Community for Over 20 Years</p>
           <a href="#services" class="new-badge">Online Course Now Available!</a>
         </div>
@@ -93,7 +125,7 @@
 
         <div class="slide-container swiper">
           <div class="slide-content">
-            <div class="card-wrapper swiper-wrapper" id="reviews-wrapper">
+            <div class="swiper-wrapper" id="reviews-wrapper">
               <!-- Review cards injected by main.js -->
             </div>
           </div>
@@ -117,7 +149,7 @@
               <li class="details">Cash Only</li>
             </ul>
             <a href="#contact" class="contact-button signup-button-blue">Contact Us</a>
-            <button type="button" class="contact-button" onclick="toggleDetails(this)">More Detail</button>
+            <button type="button" class="contact-button toggle" aria-expanded="false">More Detail</button>
             <div class="extra-details">
               <p>
                 Ideal for students who prefer a traditional, flexible way to complete driver education
@@ -139,7 +171,7 @@
               <li class="details">Instant Course Access After Online Payment</li>
             </ul>
             <a href="#online-course" class="contact-button signup-button">Sign Up Now</a>
-            <button type="button" class="contact-button" onclick="toggleDetails(this)">More Detail</button>
+            <button type="button" class="contact-button toggle" aria-expanded="false">More Detail</button>
             <div class="extra-details">
               <p>
                 Ideal for students who want a faster, more convenient option. Complete the 30-hour
@@ -169,14 +201,14 @@
             </div>
             <ul>
               <li class="details">Available 7 Days a Week</li>
-              <li class="details clickable" data-target="extra-details">
-                Bring Valid Learner's Permit or <span class="other-docs">Other Accepted Documents</span>
+              <li class="details clickable">
+                Bring Valid Learner's Permit or <span class="inline-link">Other Accepted Documents</span>
               </li>
               <li class="details">Vehicle Provided</li>
               <li class="details">Cash Only</li>
             </ul>
             <a href="#contact" class="contact-button signup-button-blue">Contact Us</a>
-            <button type="button" class="contact-button" onclick="toggleDetails(this)">More Detail</button>
+            <button type="button" class="contact-button toggle" aria-expanded="false">More Detail</button>
             <div class="extra-details">
               <p>
                 Administered by a certified third-party examiner. Be prepared to complete maneuvers such as
@@ -215,8 +247,6 @@
             <a href="tel:+18012328775">(801) 232-8775</a>
           </div>
 
-          <div class="spacer"></div>
-
           <h2>Address</h2>
           <address>1265 W 500 N, Salt Lake City, UT 84116</address>
           <div class="phone-numbers">
@@ -232,7 +262,7 @@
               rel="noopener noreferrer"
               >Apple Maps</a
             >
-            <a href="#contact" id="copyLink" onclick="copyAddress(event)">Copy Address</a>
+            <a href="#contact" id="copy-address">Copy Address</a>
           </div>
         </div>
       </section>
@@ -277,7 +307,7 @@
             href="files/Online%20Driver%20Education%20Enrollment%20Agreement%20%26%20Terms.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            class="contact-button terms-button"
+            class="contact-button"
           >
             View Enrollment Agreement &amp; Terms
           </a>
@@ -297,7 +327,7 @@
         <div class="contact-glass">
           <h2>Frequently Asked Questions</h2>
 
-          <button type="button" class="contact-button" onclick="toggleQuestions(this)">
+          <button type="button" class="contact-button toggle" aria-expanded="false">
             What forms of payment do you accept?
           </button>
           <div class="extra-details">
@@ -305,7 +335,7 @@
             Please bring the exact amount.
           </div>
 
-          <button type="button" class="contact-button" onclick="toggleQuestions(this)">
+          <button type="button" class="contact-button toggle" aria-expanded="false">
             What documents do I need to bring for my driving lessons?
           </button>
           <div class="extra-details">
@@ -317,15 +347,15 @@
             </ul>
           </div>
 
-          <button type="button" class="contact-button" onclick="toggleQuestions(this)">
+          <button type="button" class="contact-button toggle" aria-expanded="false">
             How do I schedule a driving lesson or road test?
           </button>
           <div class="extra-details">
-            We're open <strong>7 days a week</strong>. Please <a id="call" href="#contact">call</a> in
+            We're open <strong>7 days a week</strong>. Please <a class="inline-link" href="#contact">call</a> in
             advance to secure your preferred time.
           </div>
 
-          <button type="button" class="contact-button" onclick="toggleQuestions(this)">
+          <button type="button" class="contact-button toggle" aria-expanded="false">
             Do you provide vehicles for the road test?
           </button>
           <div class="extra-details">
