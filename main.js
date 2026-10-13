@@ -38,12 +38,10 @@ document.addEventListener("click", (e) => {
 /* ---------- Copy address ---------- */
 
 const copyLink = document.getElementById("copy-address");
-const address = document.querySelector("#contact address").textContent.trim();
 
-copyLink.addEventListener("click", (e) => {
-  e.preventDefault();
+copyLink.addEventListener("click", () => {
   navigator.clipboard
-    .writeText(address)
+    .writeText(copyLink.dataset.address)
     .then(() => flash("Copied!"), () => flash("Copy failed"));
 });
 
